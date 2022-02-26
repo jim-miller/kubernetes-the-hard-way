@@ -1,56 +1,26 @@
 # Prerequisites
 
-## Google Cloud Platform
+## Cluster of Rasperry Pi 4s
 
-This tutorial leverages the [Google Cloud Platform](https://cloud.google.com/) to streamline provisioning of the compute infrastructure required to bootstrap a Kubernetes cluster from the ground up. [Sign up](https://cloud.google.com/free/) for $300 in free credits.
+This is a stand in for the Google compute resources.
 
-[Estimated cost](https://cloud.google.com/products/calculator#id=873932bc-0840-4176-b0fa-a8cfd4ca61ae) to run this tutorial: $0.23 per hour ($5.50 per day).
+## Ansible
 
-> The compute resources required for this tutorial exceed the Google Cloud Platform free tier.
+This replaces the Google Cloud SDK.
 
-## Google Cloud Platform SDK
+## Required Hardware
 
-### Install the Google Cloud SDK
+This tutorial is intended to deploy Kubernetes across five Raspberry Pi 4 nodes. Two nodes will act as the control
+plane, and the remaining three will serve as worker nodes. Hardware choices can be flexible, however, and you can in
+theory complete this tutorial with only two nodes.
 
-Follow the Google Cloud SDK [documentation](https://cloud.google.com/sdk/) to install and configure the `gcloud` command line utility.
+## Network Topology
 
-Verify the Google Cloud SDK version is 338.0.0 or higher:
-
-```
-gcloud version
-```
-
-### Set a Default Compute Region and Zone
-
-This tutorial assumes a default compute region and zone have been configured.
-
-If you are using the `gcloud` command-line tool for the first time `init` is the easiest way to do this:
-
-```
-gcloud init
-```
-
-Then be sure to authorize gcloud to access the Cloud Platform with your Google user credentials:
-
-```
-gcloud auth login
-```
-
-Next set a default compute region and compute zone:
-
-```
-gcloud config set compute/region us-west1
-```
-
-Set a default compute zone:
-
-```
-gcloud config set compute/zone us-west1-c
-```
-
-> Use the `gcloud compute zones list` command to view additional regions and zones.
+OpenWRT as an edge router. 192.168.1.0/24 lan.
 
 ## Running Commands in Parallel with tmux
+
+**Note** We may not need this since we'll be provisioning with Ansible playbooks.
 
 [tmux](https://github.com/tmux/tmux/wiki) can be used to run commands on multiple compute instances at the same time. Labs in this tutorial may require running the same commands across multiple compute instances, in those cases consider using tmux and splitting a window into multiple panes with synchronize-panes enabled to speed up the provisioning process.
 

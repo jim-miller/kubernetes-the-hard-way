@@ -4,10 +4,10 @@ In this lab you will bootstrap three Kubernetes worker nodes. The following comp
 
 ## Prerequisites
 
-The commands in this lab must be run on each worker instance: `worker-0`, `worker-1`, and `worker-2`. Login to each worker instance using the `gcloud` command. Example:
+The commands in this lab must be run on each worker instance: `worker-0`, `worker-1`, and `worker-2`. Login to each worker instance using the `ssh` command. Example:
 
 ```
-gcloud compute ssh worker-0
+ssh worker-0
 ```
 
 ### Running commands in parallel with tmux
@@ -79,7 +79,7 @@ Install the worker binaries:
   tar -xvf containerd-1.4.4-linux-amd64.tar.gz -C containerd
   sudo tar -xvf cni-plugins-linux-amd64-v0.9.1.tgz -C /opt/cni/bin/
   sudo mv runc.amd64 runc
-  chmod +x crictl kubectl kube-proxy kubelet runc 
+  chmod +x crictl kubectl kube-proxy kubelet runc
   sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/
   sudo mv containerd/bin/* /bin/
 }
@@ -89,9 +89,16 @@ Install the worker binaries:
 
 Retrieve the Pod CIDR range for the current compute instance:
 
+TODO: Come up with command to return CIDR
+
+In Ubuntu, the following prints out something like `192.168.1.21/24`. We still have to convert that to `192.168.1.0/24`
+
 ```
-POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
+ip -o -4 addr list eth0 | awk '{print $4}'
+```
+
+```
+POD_CIDR=192.168.1.0/24
 ```
 
 Create the `bridge` network configuration file:
@@ -210,7 +217,7 @@ tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 ```
 
-> The `resolvConf` configuration is used to avoid loops when using CoreDNS for service discovery on systems running `systemd-resolved`. 
+> The `resolvConf` configuration is used to avoid loops when using CoreDNS for service discovery on systems running `systemd-resolved`.
 
 Create the `kubelet.service` systemd unit file:
 
@@ -297,7 +304,7 @@ EOF
 List the registered Kubernetes nodes:
 
 ```
-gcloud compute ssh controller-0 \
+ssh controller-0 \
   --command "kubectl get nodes --kubeconfig admin.kubeconfig"
 ```
 

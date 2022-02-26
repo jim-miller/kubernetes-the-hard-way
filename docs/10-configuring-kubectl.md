@@ -10,11 +10,11 @@ Each kubeconfig requires a Kubernetes API Server to connect to. To support high 
 
 Generate a kubeconfig file suitable for authenticating as the `admin` user:
 
+**TODO**: Find public address load balancer solution for OpenWRT environment
+
 ```
 {
-  KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
-    --region $(gcloud config get-value compute/region) \
-    --format 'value(address)')
+  KUBERNETES_PUBLIC_ADDRESS={$(nslookup controller-0 | awk -F': ' 'NR==5 { print $2 }') \
 
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \

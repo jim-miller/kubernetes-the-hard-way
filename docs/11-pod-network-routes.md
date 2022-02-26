@@ -1,5 +1,7 @@
 # Provisioning Pod Network Routes
 
+**TODO**: Decide if we need routes at all considering our private LAN network allows all traffic internally.
+
 Pods scheduled to a node receive an IP address from the node's Pod CIDR range. At this point pods can not communicate with other pods running on different nodes due to missing network [routes](https://cloud.google.com/compute/docs/vpc/routes).
 
 In this lab you will create a route for each worker node that maps the node's Pod CIDR range to the node's internal IP address.

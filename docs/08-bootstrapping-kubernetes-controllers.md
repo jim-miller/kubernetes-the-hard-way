@@ -4,10 +4,10 @@ In this lab you will bootstrap the Kubernetes control plane across three compute
 
 ## Prerequisites
 
-The commands in this lab must be run on each controller instance: `controller-0`, `controller-1`, and `controller-2`. Login to each controller instance using the `gcloud` command. Example:
+The commands in this lab must be run on each controller instance: `controller-0`, `controller-1`, and `controller-2`. Login to each controller instance using the `ssh` command. Example:
 
 ```
-gcloud compute ssh controller-0
+ssh controller-0
 ```
 
 ### Running commands in parallel with tmux
@@ -58,19 +58,13 @@ Install the Kubernetes binaries:
 The instance internal IP address will be used to advertise the API Server to members of the cluster. Retrieve the internal IP address for the current compute instance:
 
 ```
-INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
+INTERNAL_IP=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 ```
 
-```
-REGION=$(curl -s -H "Metadata-Flavor: Google" \
-  http://metadata.google.internal/computeMetadata/v1/project/attributes/google-compute-default-region)
-```
+TODO: Figure out an actual public address load balancer for the cluster in an OpenWRT environment
 
 ```
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
-  --region $REGION \
-  --format 'value(address)')
+KUBERNETES_PUBLIC_ADDRESS={$(nslookup controller-0 | awk -F': ' 'NR==5 { print $2 }')
 ```
 
 Create the `kube-apiserver.service` systemd unit file:
@@ -359,6 +353,8 @@ In this section you will provision an external load balancer to front the Kubern
 
 Create the external load balancer network resources:
 
+**TODO**: Find load balancer solution for OpenWRT environment
+
 ```
 {
   KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
@@ -395,10 +391,10 @@ Create the external load balancer network resources:
 
 Retrieve the `kubernetes-the-hard-way` static IP address:
 
+**TODO**: Find public address load balancer solution for OpenWRT environment
+
 ```
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
-  --region $(gcloud config get-value compute/region) \
-  --format 'value(address)')
+KUBERNETES_PUBLIC_ADDRESS={$(nslookup controller-0 | awk -F': ' 'NR==5 { print $2 }')
 ```
 
 Make a HTTP request for the Kubernetes version info:

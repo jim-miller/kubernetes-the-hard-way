@@ -115,4 +115,4 @@ kubectl version --client
 Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-Next: [Provisioning Compute Resources](03-compute-resources.md)
+Next: [Provisioning Nodes](03-compute-resources.md)

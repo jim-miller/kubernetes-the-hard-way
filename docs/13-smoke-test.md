@@ -16,7 +16,7 @@ kubectl create secret generic kubernetes-the-hard-way \
 Print a hexdump of the `kubernetes-the-hard-way` secret stored in etcd:
 
 ```
-gcloud compute ssh controller-0 \
+ssh controller-0 \
   --command "sudo ETCDCTL_API=3 etcdctl get \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/etcd/ca.pem \
@@ -181,6 +181,8 @@ Retrieve the node port assigned to the `nginx` service:
 NODE_PORT=$(kubectl get svc nginx \
   --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
 ```
+
+**TODO** Decide if we want to go down this route (no pun intended) of locking down local lab LAN.
 
 Create a firewall rule that allows remote access to the `nginx` node port:
 
